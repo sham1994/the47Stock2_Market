@@ -55,7 +55,7 @@
 		  <!-- User Account -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <sapn id="user">the47tm</sapn>
+              <sapn id="user">The 47</sapn>
             </a>
             <ul class="dropdown-menu scale-up">
               <!-- User image -->
@@ -440,24 +440,26 @@
 	<script src="js/pages/project-table-dashboard.js"></script>
 	<script type="text/javascript">
     $(function(){
+    	var host=window.location.host;
     	var user=sessionStorage.getItem("player_name");
     	$("#user").text(user);
     	$.ajax({
-            url: "http://localhost:8080/47SMSG/rest/game/current-round",
+            url: "http://"+host+"/47SMSG/rest/game/current-round",
             type: 'GET',
             success: function (res) {
+            	console.log(res);
               $("#this_round").text(res);
             },
         });
     	$.ajax({
-            url: "http://localhost:8080/47SMSG/rest/player-broker/bankdetails/"+user,
+            url: "http://"+host+"/47SMSG/rest/player-broker/bankdetails/"+user,
             type: 'GET',
             success: function (res) {
                $("#accountBalance").text(res.accountBalance);
             },
         });
     	$.ajax({
-            url: "http://localhost:8080/47SMSG/rest/player-broker/player-info/"+user,
+            url: "http://"+host+"/47SMSG/rest/player-broker/player-info/"+user,
             type: 'GET',
             success: function (res) {
                $("#stockValue").text(res.stock_value);
@@ -466,7 +468,7 @@
     	$("#companies").empty();
     	$("#company").empty();
 		$.ajax({
-            url: "http://localhost:8080/47SMSG/rest/player-broker",
+            url: "http://"+host+"/47SMSG/rest/player-broker",
             type: 'GET',
             success: function (res) {
                $.each(res,function(key,company){
@@ -477,12 +479,12 @@
         });
 		$("#players > tbody").empty();
 		$.ajax({
-            url: "http://localhost:8080/47SMSG/rest/game/players",
+            url: "http://"+host+"/47SMSG/rest/game/players",
             type: 'GET',
             success: function (res) {
                $.each(res,function(key,player){
             	   $.ajax({
-                       url: "http://localhost:8080/47SMSG/rest/player-broker/bankdetails/"+player.player_name,
+                       url: "http://"+host+"/47SMSG/rest/player-broker/bankdetails/"+player.player_name,
                        type: 'GET',
                        success: function (res) {
                           $("#players > tbody:last-child").append('<tr><td><i class="fa fa-dot-circle-o complete"></i>'+player.player_name+'</td><td>'+player.stock_value+'</td><td>'+res.accountBalance+'</td></tr>');
@@ -491,24 +493,56 @@
             	   });
             },
         });
+		$("#user_shares >tbody").empty();
+		$("#sellcompany").empty();
+		$.ajax({
+            url: "http://"+host+"/47SMSG/rest/game/player-stock/"+user,
+            type: 'GET',
+            success: function (res) {
+            	
+               $.each(res,function(key,stock){
+            	   $("#sellcompany").append('<option value="'+stock.company+'">'+stock.company+'</option>');
+            	   $("#user_shares > tbody:last-child").append('<tr><td>'+stock.company+'</td><td>'+stock.stock_Count+'</td><td>'+stock.stock_Value+'</td></tr>');
+               });
+            },
+        });
+		$("#sellcompany").change(function(){
+			$("#sellamount").empty();
+			if($("#sellcompany :selected").val()!=null){
+			$.ajax({
+					url: "http://"+host+"/47SMSG/rest/player-broker/stock-count/"+$("#sellcompany :selected").val()+"/"+user,
+		            type: 'GET',
+		            success: function (res) {
+		            	
+		            	$("#sellamount").empty();
+		               for(i=1;i<=res;i++){
+		            	   $("#sellamount").append('<option value="'+i+'">'+i+'</option>');
+		            	}
+		            },
+	        });
+			}else{
+				alert("Please Select an Stock to sell.")
+			}
+		});
 		
 		setInterval(function(){
 			$.ajax({
-	            url: "http://localhost:8080/47SMSG/rest/player-broker/bankdetails/"+user,
+	            url: "http://"+host+"/47SMSG/rest/player-broker/bankdetails/"+user,
 	            type: 'GET',
 	            success: function (res) {
 	               $("#accountBalance").text(res.accountBalance);
 	            },
 	        });
 			$.ajax({
-	            url: "http://localhost:8080/47SMSG/rest/player-broker/bankdetails/"+user,
+	            url: "http://"+host+"/47SMSG/rest/game/current-round",
 	            type: 'GET',
 	            success: function (res) {
-	               $("#accountBalance").text(res.accountBalance);
+	            	console.log(res);
+	              $("#this_round").text(res);
 	            },
 	        });
 	    	$.ajax({
-	            url: "http://localhost:8080/47SMSG/rest/player-broker/player-info/"+user,
+	            url: "http://"+host+"/47SMSG/rest/player-broker/player-info/"+user,
 	            type: 'GET',
 	            success: function (res) {
 	               $("#stockValue").text(res.stock_value);
@@ -516,7 +550,7 @@
 	        });
 	    	$("#companies").empty();
 			$.ajax({
-	            url: "http://localhost:8080/47SMSG/rest/player-broker",
+	            url: "http://"+host+"/47SMSG/rest/player-broker",
 	            type: 'GET',
 	            success: function (res) {
 	               $.each(res,function(key,company){
@@ -526,12 +560,12 @@
 	        });
 			$("#players > tbody").empty();
 			$.ajax({
-	            url: "http://localhost:8080/47SMSG/rest/game/players",
+	            url: "http://"+host+"/47SMSG/rest/game/players",
 	            type: 'GET',
 	            success: function (res) {
 	               $.each(res,function(key,player){
 	            	   $.ajax({
-	                       url: "http://localhost:8080/47SMSG/rest/player-broker/bankdetails/"+player.player_name,
+	                       url: "http://"+host+"/47SMSG/rest/player-broker/bankdetails/"+player.player_name,
 	                       type: 'GET',
 	                       success: function (res) {
 	                          $("#players > tbody:last-child").append('<tr><td><i class="fa fa-dot-circle-o complete"></i>'+player.player_name+'</td><td>'+player.stock_value+'</td><td>'+res.accountBalance+'</td></tr>');
@@ -542,7 +576,7 @@
 	        });
 			$("#suggesstions > tbody").empty();
     		$.ajax({
-                url: "http://localhost:8080/47SMSG/rest/analyst/stocks",
+                url: "http://"+host+"/47SMSG/rest/analyst/stocks",
                 type: 'GET',
                 success: function (res) {
                    $.each(res,function(key,recom){
@@ -552,7 +586,7 @@
             });
     		$("#share_records >tbody").empty();
     		$.ajax({
-                url: "http://localhost:8080/47SMSG/rest/player-broker/stocktransactions/"+user,
+                url: "http://"+host+"/47SMSG/rest/player-broker/stocktransactions/"+user,
                 type: 'GET',
                 success: function (res) {
                    $.each(res,function(key,transaction){
@@ -562,37 +596,30 @@
             });
     		$("#account_records >tbody").empty();
     		$.ajax({
-                url: "http://localhost:8080/47SMSG/rest/player-broker/accounttransactions/"+user,
+                url: "http://"+host+"/47SMSG/rest/player-broker/accounttransactions/"+user,
                 type: 'GET',
                 success: function (res) {
-                	console.log(res);
+                	
                    $.each(res,function(key,transaction){
                 	   $("#account_records > tbody:last-child").append('<tr><td>'+transaction.time+'</td><td>'+transaction.transaction_amount+'</td><td>'+transaction.transaction_type+'</td><td>'+transaction.balance_after+'</td></tr>');
                    });
                 },
             });
     		$("#user_shares >tbody").empty();
-    		$("#sellcompany").empty();
-    		$("#sellamount").empty();
     		$.ajax({
-                url: "http://localhost:8080/47SMSG/rest/game/player-stock/"+user,
+                url: "http://"+host+"/47SMSG/rest/game/player-stock/"+user,
                 type: 'GET',
                 success: function (res) {
-                	console.log(res);
+                	
                    $.each(res,function(key,stock){
-                	   $("#sellcompany").append('<option value="'+stock.company+'">'+stock.company+'</option>');
                 	   $("#user_shares > tbody:last-child").append('<tr><td>'+stock.company+'</td><td>'+stock.stock_Count+'</td><td>'+stock.stock_Value+'</td></tr>');
-                       
-                	   for(i=1;i<=stock.stock_Count;i++){
-                		   $("#sellamount").append('<option value="'+i+'">'+i+'</option>');
-                	   }
                    });
                 },
             });
     		$("#stock_history >thead").empty();
     		$("#stock_history >tbody").empty();
     		$.ajax({
-      	        url: "http://localhost:8080/47SMSG/rest/game/company-trends",
+      	        url: "http://"+host+"/47SMSG/rest/game/company-trends",
       	        type: 'GET',
       	        success: function (res) {
       	           var round=$("#this_round").text();
@@ -617,10 +644,25 @@
 		$("#buy_button").click(function(){
     		if($("#amount").val()>0){
     			$.ajax({
-                    url: "http://localhost:8080/47SMSG/rest/player-broker/buy/"+user+'/'+$( "#company :selected" ).val()+'/'+$("#amount").val(),
+                    url: "http://"+host+"/47SMSG/rest/player-broker/buy/"+user+'/'+$( "#company :selected" ).val()+'/'+$("#amount").val(),
                     type: 'GET',
                     success: function (res) {
                     	$("#amount").val('');
+                    	$("#user_shares >tbody").empty();
+                		$("#sellcompany").empty();
+                		$.ajax({
+                            url: "http://"+host+"/47SMSG/rest/game/player-stock/"+user,
+                            type: 'GET',
+                            success: function (res) {
+                            	
+                            	$("#sellcompany").append('<option></option>');
+                               $.each(res,function(key,stock){
+                            	   $("#sellcompany").append('<option value="'+stock.company+'">'+stock.company+'</option>');
+                            	   $("#user_shares > tbody:last-child").append('<tr><td>'+stock.company+'</td><td>'+stock.stock_Count+'</td><td>'+stock.stock_Value+'</td></tr>');
+                                   
+                               });
+                            },
+                        });
                        if(res!=true){
                     	   alert("Not Completed")
                        }
@@ -635,7 +677,7 @@
     	$("#sell_button").click(function(){
     		
     		$.ajax({
-                url: "http://localhost:8080/47SMSG/rest/player-broker/sell/"+user+'/'+$("#sellcompany :selected" ).val()+'/'+$("#sellamount :selected").val(),
+                url: "http://"+host+"/47SMSG/rest/player-broker/sell/"+user+'/'+$("#sellcompany :selected" ).val()+'/'+$("#sellamount :selected").val(),
                 type: 'GET',
                 success: function (res) {
                    if(res!=true){

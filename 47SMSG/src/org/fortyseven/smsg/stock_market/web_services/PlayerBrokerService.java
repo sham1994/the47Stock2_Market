@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+
 import org.fortyseven.smsg.stock_market.core.GameCore;
 import org.fortyseven.smsg.stock_market.dao.BankAccountDAO;
 import org.fortyseven.smsg.stock_market.dao.CompanyDAO;
@@ -93,6 +94,8 @@ public class PlayerBrokerService {
 		}
         
     }
+	
+	
 	
 	@GET
     @Path("sell/{player}/{company}/{stocks}")
@@ -183,6 +186,13 @@ public class PlayerBrokerService {
 			}
 		}
         return true;
+    }
+	
+	@GET
+    @Path("stock-count/{company_name}/{player_name}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public double getStockCount(@PathParam("company_name") String company_name,@PathParam("player_name") String player_name) {
+        return PlayerSharesDAO.getShareCount(company_name, player_name);
     }
 	
 }

@@ -56,15 +56,16 @@
 	<script src="assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
     $(function(){
+    	var host=window.location.host;
     	$("#btnlog").click(function(){
     		$.ajax({
-                url: "http://localhost:8080/47SMSG/rest/player-broker/addplayer/"+$("#user_name").val(),
+                url: "http://"+host+"/47SMSG/rest/player-broker/addplayer/"+$("#user_name").val(),
                 type: 'GET',
                 success: function (res) {
                    console.log(res);
                    if(res==true){
                 	   sessionStorage.setItem("player_name", $("#user_name").val());
-                	   window.location="http://localhost:8080/47SMSG/views/index.html";
+                	   window.location="http://"+host+"/47SMSG/views/index.html";
                    }else{
                 	   alert("Name Already Taken.");
                    }

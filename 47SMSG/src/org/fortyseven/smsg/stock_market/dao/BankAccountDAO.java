@@ -25,7 +25,6 @@ public class BankAccountDAO {
 			if(bank_accounts.get(i).getAccountHolder().equals(bank_account.getAccountHolder())) {
 				bank_account.setAccountBalance(bank_account.getAccountBalance()-trans_amount);
 				bank_accounts.set(i, bank_account);
-				System.out.println("WITHDRAW");
 				break;
 			}
 		}
@@ -37,7 +36,6 @@ public class BankAccountDAO {
 			if(bank_accounts.get(i).getAccountHolder().equals(bank_account.getAccountHolder())) {
 				bank_account.setAccountBalance(bank_account.getAccountBalance()+trans_amount);
 				bank_accounts.set(i, bank_account);
-				System.out.println("DEPOSIT");
 				break;
 			}
 		}
