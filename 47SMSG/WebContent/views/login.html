@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  
+    <title>47SMSG - Stock Market Simulation Game</title>
+  
+	<!-- Bootstrap 4.0-->
+	<link rel="stylesheet" href="assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="views/css/bootstrap-extend.css">
+	<link rel="stylesheet" href="views/css/master_style.css">
+	<link rel="stylesheet" href="views/css/skins/_all-skins.css">	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+   
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+  <img src="images/Logo1.jpg" style="width: 350px;"> <br>
+    <b>47SMSG</b> <br> Stock Market Simulation Game
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Enter your name to Play</p>
+
+    <form action="" method="post" class="form-element">
+      <div class="form-group has-feedback">
+        <input id="user_name" type="text" class="form-control" placeholder="Name">
+        <span class="fa fa-email form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <button id="btnlog" type="button" class="btn btn-info btn-block margin-top-10">Play Now</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+
+	<!-- jQuery 3 -->
+	<script src="assets/vendor_components/jquery/dist/jquery.min.js"></script>
+	
+	<!-- popper -->
+	<script src="assets/vendor_components/popper/dist/popper.min.js"></script>
+	
+	<!-- Bootstrap 4.0-->
+	<script src="assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+    $(function(){
+    	$("#btnlog").click(function(){
+    		$.ajax({
+                url: "http://localhost:8080/47SMSG/rest/player-broker/addplayer/"+$("#user_name").val(),
+                type: 'GET',
+                success: function (res) {
+                   console.log(res);
+                   if(res==true){
+                	   sessionStorage.setItem("player_name", $("#user_name").val());
+                	   window.location="http://localhost:8080/47SMSG/views/index.html";
+                   }else{
+                	   alert("Name Already Taken.");
+                   }
+                },
+            });
+    	});
+    });
+    </script>
+
+</body>
+
+</html>
